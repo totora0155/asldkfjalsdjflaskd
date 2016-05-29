@@ -1,0 +1,9 @@
+---
+- name: Install nginx
+  pacman: name=nginx
+- name: Create conf.d dir
+  file: path=/etc/nginx/conf.d/ state=directory
+- name: Copy conf file
+  template: src=roles/nginx/templates/{{conf_template}}.conf dest=/etc/nginx/conf.d/{{inventory_hostname}}.conf
+- name: Start,Restart nginx
+  service: name=nginx state=restarted

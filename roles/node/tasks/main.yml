@@ -6,4 +6,4 @@
 - name: Install n in global
   npm: name=n global=yes
 - name: Downgrade NodeJS
-  command: n 4.4.5
+  command: n {{node_var}}

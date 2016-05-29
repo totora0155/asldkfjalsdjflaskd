@@ -2,6 +2,9 @@
 - hosts: server
   become: true
   become_user: root
+  vars:
+    node_var: 4.4.5
   roles:
     - node
     - scala
+    - {role: nginx, conf_template: sbt-play}
