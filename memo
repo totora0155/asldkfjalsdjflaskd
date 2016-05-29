@@ -1,1 +1,1 @@
-ansible-playbook node.yml -i conoha-hosts --private-key=~/.ssh/node-conoha-cli.pem -u root
+ansible-playbook scala.yml -i conoha-hosts --private-key=~/.ssh/node-conoha-cli.pem -u root
