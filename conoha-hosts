@@ -1,0 +1,5 @@
+[server]
+163.44.169.171
+
+[server:vars]
+ansible_python_interpreter=/usr/bin/python2

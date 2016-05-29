@@ -1,0 +1,7 @@
+http://dev.classmethod.jp/server-side/ansible/enable_ssh_conf_using_via_ansible-cnf/
+Host xxx.web1a
+  User admin
+  HostName xxx.xxx.xxx.xxx
+  IdentityFile ~/.ssh/key.pem
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
