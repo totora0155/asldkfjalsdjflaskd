@@ -1,6 +1,15 @@
 ---
 - name: Install Git
   pacman: name=git state=present
+
+- name: Install jdk8
+  pacman: name=jdk8-openjdk state=present
+- name: Set jdk8
+  command: archlinux-java set java-8-openjdk
 - name: Clone sbt-play project
-  git: repo={{repo_name}} dest=/home/root/sbt-play
+  git: repo={{repo_name}} clone=yes dest=/home/root/sbt-play
   when: repo_name is defined
+
+# todo Supervisor
+- name: Sbt run
+  command: sbt run chdir=/home/root/sbt-play

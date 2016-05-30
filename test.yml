@@ -5,7 +5,7 @@
   vars:
     node_var: 4.4.5
   roles:
-    # - node
-    # - scala
-    # - {role: nginx, conf_template: sbt-play}
+    - node
+    - scala
+    - {role: nginx, conf_template: sbt-play}
     - {role: sbt-play, repo_name: "git@github.com:totora0155/jjsu89kbku.git"}
