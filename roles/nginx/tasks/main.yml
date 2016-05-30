@@ -2,6 +2,10 @@
 - name: Upgrade packages
   pacman: update_cache=yes upgrade=yes
 
+- name: Add nginx user
+  user:
+    name=nginx state=present
+    shell=/sbin/nologin
 - name: Install nginx
   pacman: name=nginx
 
