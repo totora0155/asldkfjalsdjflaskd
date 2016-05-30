@@ -8,4 +8,5 @@
     - node
     - scala
     - {role: nginx, conf_template: sbt-play}
+    - {role: supervisor, play_app_name: test}
     - {role: sbt-play, repo_name: "git@github.com:totora0155/jjsu89kbku.git"}

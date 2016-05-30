@@ -1,0 +1,8 @@
+---
+- name: Install supervisor
+  pacman: name=supervisor state=present
+- name: Create conf.d dir
+  file: path=/etc/supervisor/conf.d/ state=directory
+- name: Copy conf file
+  template: src=roles/supervisor/templates/sbt-play.conf dest=/etc/supervisor/conf.d/{{play_app_name}}.conf
+  when: play_app_name is defined
