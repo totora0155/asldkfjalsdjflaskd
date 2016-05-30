@@ -17,25 +17,11 @@
     ssh_opts="-o StrictHostKeyChecking=no"
   when: repo_name is defined
 
-# ps aux | grep から取得する
-- name: Present port
-  shell: "netstat -nao | grep 127.0.0.1:9000"
-  register: port
-  ignore_errors: true
-- name: Present file
-  stat: path=/home/root/sbt-play/target/universal/stage/RUNNING_PID
-  register: file
-- debug: msg={{port}}
-- name: Kill PID
-  shell: "echo /home/root/sbt-play/target/universal/stage/RUNNING_PID | xargs -I@ kill @"
-  when: port.stdout != ""
-- name: Remove PID file
-  file: path=home/root/sbt-play/target/universal/stage/RUNNING_PID state=absent
-  when: file.stat.exists
-- name: Sbt package
-  command: sbt clean compile stage chdir=/home/root/sbt-play
-# サービス化する
-- name: Start play app
-  command: "/home/root/sbt-play/target/universal/stage/bin/{{app_name}} -Dapplication.secret=abcdefghijk"
-  async: 36000
-  poll: 60
+- name: "Create /etc/systemd/service/"
+  file: path=/etc/systemd/service/ state=directory
+- name: Create playapp.service
+  template:
+    src=roles/sbt-play/templates/playapp.service
+    dest=/etc/systemd/service/playapp.service
+- name: Start app:{{app_name}}
+  service: name=playapp state=restarted

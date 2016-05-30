@@ -1,0 +1,17 @@
+[Unit]
+Description=Play2 Server for {{app_name}}
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/home/root/sbt-play/target/universal/stage/RUNNING_PID
+
+ExecStartPre=/bin/sh -c 'cd /home/root/sbt-play ;/bin/rm target/universal/stage/RUNNING_PID ; sbt clean compile stage'
+ExecStart=/home/root/sbt-play/target/universal/stage/bin/{{app_name}} -Dapplication.secret=abcdefghijk
+ExecStop=/bin/kill $MAINPID
+ExecStopPost=/bin/rm /home/root/sbt-play/target/universal/stage/RUNNING_PID
+ExecRestart=/bin/kill $MAINPID
+Restart=true
+
+[Install]
+WantedBy=multi-user.target
