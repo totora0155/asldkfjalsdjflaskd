@@ -1,7 +1,7 @@
 ---
 - name: Upgrade packages
   pacman: update_cache=yes upgrade=yes
-  
+
 - name: Install Git
   pacman: name=git state=present
 
@@ -10,9 +10,32 @@
 - name: Set jdk8
   command: archlinux-java set java-8-openjdk
 - name: Clone sbt-play project
-  git: repo={{repo_name}} clone=yes dest=/home/root/sbt-play
+  git:
+    repo={{repo_name}}
+    clone=yes
+    dest=/home/root/sbt-play
+    ssh_opts="-o StrictHostKeyChecking=no"
   when: repo_name is defined
 
-# todo Supervisor
+# ps aux | grep から取得する
+- name: Present port
+  shell: "netstat -nao | grep 127.0.0.1:9000"
+  register: port
+  ignore_errors: true
+- name: Present file
+  stat: path=/home/root/sbt-play/target/universal/stage/RUNNING_PID
+  register: file
+- debug: msg={{port}}
+- name: Kill PID
+  shell: "echo /home/root/sbt-play/target/universal/stage/RUNNING_PID | xargs -I@ kill @"
+  when: port.stdout != ""
+- name: Remove PID file
+  file: path=home/root/sbt-play/target/universal/stage/RUNNING_PID state=absent
+  when: file.stat.exists
 - name: Sbt package
   command: sbt clean compile stage chdir=/home/root/sbt-play
+# サービス化する
+- name: Start play app
+  command: "/home/root/sbt-play/target/universal/stage/bin/{{app_name}} -Dapplication.secret=abcdefghijk"
+  async: 36000
+  poll: 60
