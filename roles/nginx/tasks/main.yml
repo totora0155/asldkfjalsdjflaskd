@@ -1,9 +1,18 @@
 ---
+- name: Upgrade packages
+  pacman: update_cache=yes upgrade=yes
+  
 - name: Install nginx
   pacman: name=nginx
 - name: Create conf.d dir
   file: path=/etc/nginx/conf.d/ state=directory
+- name: Copy ngin.conf
+  template:
+    src=roles/nginx/templates/nginx.conf
+    dest=/etc/nginx/nginx.conf
 - name: Copy conf file
-  template: src=roles/nginx/templates/{{conf_template}}.conf dest=/etc/nginx/conf.d/{{inventory_hostname}}.conf
+  template:
+    src=roles/nginx/templates/{{conf_template}}.conf
+    dest=/etc/nginx/conf.d/{{inventory_hostname}}.conf
 - name: Start,Restart nginx
   service: name=nginx state=restarted

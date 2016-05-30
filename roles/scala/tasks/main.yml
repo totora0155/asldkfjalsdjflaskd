@@ -1,3 +1,6 @@
 ---
+- name: Upgrade packages
+  pacman: update_cache=yes upgrade=yes
+  
 - name: Install Scala and sbt
   pacman: name=scala,sbt state=present

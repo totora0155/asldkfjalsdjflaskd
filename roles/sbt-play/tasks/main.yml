@@ -1,4 +1,7 @@
 ---
+- name: Upgrade packages
+  pacman: update_cache=yes upgrade=yes
+  
 - name: Install Git
   pacman: name=git state=present
 
@@ -11,5 +14,5 @@
   when: repo_name is defined
 
 # todo Supervisor
-- name: Sbt run
-  command: sbt run chdir=/home/root/sbt-play
+- name: Sbt package
+  command: sbt clean compile stage chdir=/home/root/sbt-play
