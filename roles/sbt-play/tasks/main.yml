@@ -1,1 +1,6 @@
 ---
+- name: Install Git
+  pacman: name=git state=present
+- name: Clone sbt-play project
+  git: repo={{repo_name}} dest=/home/root/sbt-play
+  when: repo_name is defined
