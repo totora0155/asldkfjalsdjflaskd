@@ -4,17 +4,29 @@
   become_user: root
   vars:
     nginx:
-      target_root_path: sample
+      local_target_dir: sample/www.hoge.com/dist/
       hostname: www
       domain: hoge.com
       location_path: /home/nginx
   roles:
-    - {role: node, node_var: 4.4.5}
-    - {role: nginx, conf_template: static-site}
+    # - {role: node, node_var: 4.4.5}
+    # - {role: nginx, conf_template: static-site}
   tasks:
     - name: Install rsync
       pacman: name=rsync state=present
+
+    - set_fact:
+        remote_target_dir: /home/nginx/{{nginx.hostname | mandatory}}.{{nginx.domain | mandatory}}
     - name: Copy target dir
       synchronize:
-        src={{nginx.target_root_path | mandatory}}/{{nginx.hostname | mandatory}}.{{nginx.domain | mandatory}}/
-        dest=/home/nginx/{{nginx.hostname | mandatory}}.{{nginx.domain | mandatory}}/
+        src={{nginx.local_target_dir | mandatory}}
+        dest={{remote_target_dir}}
+        dirs=yes
+        delete=yes
+    -  name: Change user to nginx
+       file:
+         path={{remote_target_dir}}
+         owner=nginx
+         group=nginx
+         state=directory
+         recurse=yes
